@@ -1,0 +1,4 @@
+to run multiple go file while being in the root directory use the following syntax in the CMD 
+go run . (path form the root the folder)
+example :-
+    go run .\cmd\web\
