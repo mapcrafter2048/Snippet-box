@@ -2,3 +2,12 @@ to run multiple go file while being in the root directory use the following synt
 go run . (path form the root the folder)
 example :-
     go run .\cmd\web\
+
+<--------------------------------------------------------------------------------------------------->
+to formate the .tmpl files run the following command 
+npm install --save-dev prettier prettier-plugin-go-template
+and make a .prettierrc file and add the following content in it 
+
+{
+  "plugins": ["prettier-plugin-go-template"]
+}

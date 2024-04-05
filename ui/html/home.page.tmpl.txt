@@ -1,0 +1,7 @@
+<!--
+The first line, {{template "base" .}}, is including the content of a template named "base". The . represents the current value being rendered by the template, which is often a struct or map that contains the data you want to display in the template. This line is essentially saying "insert the content of the 'base' template here, and use the current data for any template actions within it".
+
+Next, {{define "title"}}Home{{ end }} is defining a new template named "title". This template doesn't include any template actions; it's just static text ("Home"). When the "base" template includes {{template "title" .}}, it will be replaced with "Home". This is a way to customize part of the "base" template. In this case, it's likely setting the title of the HTML page.
+
+Finally, {{define "body"}}...{{ end }} is defining another template named "body". This template includes some static HTML content. Like the "title" template, this "body" template can be included in the "base" template using {{template "body" .}}. This allows you to customize the body of the HTML page for each specific page template.
+-->

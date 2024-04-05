@@ -1,0 +1,5 @@
+<!--
+The {{define "footer"}} and {{ end }} lines are defining a new template named "footer". Anything between these two lines is the content of the "footer" template. In this case, the content is a simple HTML footer element with a link to the Go programming language website.
+
+The {{define ...}} action is a way to create reusable pieces of template content. Once a template is defined, it can be included in other templates using the {{template ...}} action. So, for example, if you have a base layout for your website that includes a footer, you could use {{template "footer" .}} in the base layout to include this footer.
+-->
