@@ -83,8 +83,8 @@ func (app *application) ShowSnippet(w http.ResponseWriter, r *http.Request) {
 	data := &templateData{Snippet: s}
 
 	files := []string{
-		// "./ui/html/show.page.tmpl",
-		"./ui/html/home.page.tmpl",
+		"./ui/html/show.page.tmpl",
+		// "./ui/html/home.page.tmpl",
 		"./ui/html/base.layout.tmpl",
 		"./ui/html/footer.partial.tmpl",
 	}
