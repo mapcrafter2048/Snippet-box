@@ -32,6 +32,15 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Fprintf(w, "%v\n", snippet)
 	// }
 
+	s, err := app.snippets.Latest()
+
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	data := &templateData{Snippets: s}
+
 	files := []string{
 		"./ui/html/home.page.tmpl",
 		"./ui/html/base.layout.tmpl",
@@ -48,7 +57,7 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 	// // content as the response body. The last parameter to Execute() represents
 	// // dynamic data that we want to pass in, which for now we'll leave as nil
 
-	err = ts.Execute(w, nil)
+	err = ts.Execute(w, data)
 	if err != nil {
 		app.serverError(w, err)
 	}
