@@ -8,29 +8,35 @@ import (
 	"strconv"
 )
 
-// define a home handler which writes a byte slice containing "Hello from snippet" as a response body
+// Home define a home handler which writes a byte slice containing "Hello from snippet" as a response body
 func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 
+	// If the current URL path doesn't match "/", use the http.NotFound() function
 	if r.URL.Path != "/" {
 		app.notFound(w)
 		return
 	}
-	// Use the template.ParseFiles() function to read the template file into a
-	// template set. If there's an error, we log the detailed error message and
-	// the http.Error() function to send a generic 500 Internal Server Error
-	// response to the user.
-	// Initialize a slice containing the paths to the two files. Note that the
-	// home.page.tmpl file must be the *first* file in the slice.
+	/*
+			Use the template.ParseFiles() function to read the template file into a
+		 	template set. If there's an error, we log the detailed error message and
+		 	the http.Error() function to send a generic 500 Internal Server Error
+		 	response to the user.
+		 	Initialize a slice containing the paths to the two files. Note that the
+		 	home.page.tmpl file must be the *first* file in the slice.
 
-	// s, err := app.snippets.Latest()
-	// if err != nil {
-	// 	app.serverError(w, err)
-	// 	return
-	// }
+		 	s, err := app.snippets.Latest()
+		 	if err != nil {
+		 		app.serverError(w, err)
+		 		return
+		 	}
 
-	// for _, snippet := range s {
-	// 	fmt.Fprintf(w, "%v\n", snippet)
-	// }
+		 	for _, snippet := range s {
+		 		fmt.Fprintf(w, "%v\n", snippet)
+		 	}
+
+		 	Initialize a slice containing the paths to the two files. Note that the
+		 	home.page.tmpl file must be the *first* file in the slice.
+	*/
 
 	s, err := app.snippets.Latest()
 
@@ -46,16 +52,27 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/base.layout.tmpl",
 		"./ui/html/footer.partial.tmpl",
 	}
-
+	/*
+		Use the ParseFiles() method to read the template file into a new template set.
+		If there's an error, we log the detailed error message and use the http.Error()
+		function to send a generic 500 Internal Server Error response to the user.
+		The ParseFiles() method returns a pointer to a template.Template object, which
+		represents the set of parsed templates.
+		We then use the Execute() method on the template set to write the template content
+		as the response body. The last parameter to Execute() represents dynamic data that
+		we want to pass in, which for now we'll leave as nil.
+	*/
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	// // We then use the Execute() method on the template set to write the templa
-	// // content as the response body. The last parameter to Execute() represents
-	// // dynamic data that we want to pass in, which for now we'll leave as nil
+	/*
+				We then use the Execute() method on the template set to write the template
+		 		content as the response body. The last parameter to Execute() represents
+		 		dynamic data that we want to pass in, which for now we'll leave as nil
+	*/
 
 	err = ts.Execute(w, data)
 	if err != nil {
@@ -65,23 +82,30 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 	// w.Write([]byte("Hello from snippet"))
 }
 
-// Add a showsnippet handler function
+// ShowSnippet Add a showSnippet handler function
 func (app *application) ShowSnippet(w http.ResponseWriter, r *http.Request) {
-	// Extract the value of the id parameter from the query string and try to
-	// convert it to an integer using the strconv.Atoi() function. If it can't
-	// be converted to an integer, or the value is less than 1, we return a 404
-	// not found response.
+
+	/*
+		Extract the value of the id parameter from the query string and try to
+		convert it to an integer using the strconv.Atoi() function. If it can't
+		be converted to an integer, or the value is less than 1, we return a 404
+		not found response.
+	*/
+
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
 		app.notFound(w)
 		return
 	}
 
-	// Use the SnippetModel object's Get method to retrieve the data for a
-	// specific record based on its ID. If no matching record is found,
-	// return a 404 Not Found response.
+	/*
+		Use the SnippetModel object's Get method to retrieve the data for a
+		specific record based on its ID. If no matching record is found,
+		return a 404 Not Found response.
+	*/
 
 	s, err := app.snippets.Get(id)
+
 	if err == models.ErrNoRecord {
 		app.notFound(w)
 		return
@@ -89,18 +113,29 @@ func (app *application) ShowSnippet(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 	}
 
+	// Initialize a new instance of templateData struct holding the snippet data
+	// and add it to the templateData struct
+
 	data := &templateData{Snippet: s}
 
 	files := []string{
 		"./ui/html/show.page.tmpl",
-		// "./ui/html/home.page.tmpl",
+		//"./ui/html/home.page.tmpl",
 		"./ui/html/base.layout.tmpl",
 		"./ui/html/footer.partial.tmpl",
 	}
-
-	// Initialize a slice containing the paths to the show.page.tmpl file,
-	// plus the base layout and footer partial that we made earlier.
-
+	/*
+		Initialize a slice containing the paths to the show.page.tmpl file,
+		plus the base layout and footer partial that we made earlier...
+		Use the ParseFiles() method to read the template file into a new template set.
+		If there's an error, we log the detailed error message and use the http.Error()
+		function to send a generic 500 Internal Server Error response to the user.
+		The ParseFiles() method returns a pointer to a template.Template object, which
+		represents the set of parsed templates.
+		We then use the Execute() method on the template set to write the template content
+		as the response body. The last parameter to Execute() represents dynamic data that
+		we want to pass in.
+	*/
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, err)
@@ -108,34 +143,41 @@ func (app *application) ShowSnippet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Pass in the templateData Struct when executing the template set
+
 	err = ts.Execute(w, data)
 	if err != nil {
 		app.serverError(w, err)
 	}
 
-	// fmt.Fprintf(w, "%v", s)
-	// // w.Write([]byte("Display a specific snippet "))
-	// fmt.Fprintf(w, "Display a specific snippet with ID %d", id)
+	//fmt.Fprintf(w, "%v", s)
+	//w.Write([]byte("Display a specific snippet "))
+	fmt.Printf("Display a specific snippet with ID %d", id)
 
 }
 
-// Add a createSnippet handler function
+// CreateSnippet Add a createSnippet handler function
 func (app *application) CreateSnippet(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
-		// Use the Header().Set() method to add an 'Allow: POST' header to the
-		// response header map. The first parameter is the header name, and
-		// the second parameter is the header value.
-		// Use the http.Error() function to send a 405 status code and "Method N
-		// Allowed" string as the response body
-		w.Header().Set("Allow", "POST") // sets the allow header to POST so that the client knows that the only allowed method is POST and other methods are not allowed
+
 		/*
-			other header methods incllude:
+			Use the Header().Set() method to add an 'Allow: POST' header to the
+			response header map. The first parameter is the header name, and
+			the second parameter is the header value.
+			Use the http.Error() function to send a 405 status code and "Method N
+			Allowed" string as the response body
+		*/
+
+		w.Header().Set("Allow", "POST") // sets the allow header to POST so that the client knows that the only allowed method is POST and other methods are not allowed
+
+		/*
+			other header methods include:
 			w.Header().Set("Content-Type", "application/json") // sets the content type header to application/json
 			w.Header().add("Content-Type", "application/json") // adds a new value to the content type header
 			w.Header().Del("Content-Type") // deletes the content type header
 			w.Header().Get("Content-Type") // gets the value of the content type header
 		*/
+
 		app.clientError(w, http.StatusMethodNotAllowed)
 
 		return

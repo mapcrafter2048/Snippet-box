@@ -2,6 +2,11 @@ package main
 
 import "net/http"
 
+/*
+Routes Define a new application struct. This holds the application-wide dependencies
+for the web application. For now we'll only include fields for the two custom
+loggers, but we'll add more to it as the build progresses.
+*/
 func (app *application) Routes() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", app.Home)
