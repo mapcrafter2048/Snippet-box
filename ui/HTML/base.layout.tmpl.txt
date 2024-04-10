@@ -1,0 +1,29 @@
+<!--
+{{...}}: Anything inside these double curly braces is a Go template action, which gets replaced with some computed value when the template is executed.
+
+template: This is a function provided by the Go html/template package. It's used to include the content of one template inside another.
+
+"title": This is the name of the template that will be included. In this case, it's looking for a template named "title".
+".": This is the current value being rendered by the template. It's often a struct or map that contains the data you want to display in the template.
+
+{{template "title" .}}: This is a template action that includes the content of the template named "title" in the current template. The . at the end is the current value being rendered by the template. It's often a struct or map that contains the data you want to display in the template.
+-->
+<!--
+{{...}}: Anything inside these double curly braces is a Go template action, which gets replaced with some computed value when the template is executed.
+
+template: This is a function provided by the Go html/template package. It's used to include the content of one template inside another.
+
+"body": This is the name of the template that will be included. In this case, it's looking for a template named "body".
+".": This is the current value being rendered by the template. It's often a struct or map that contains the data you want to display in the template.
+
+So, {{template "body" .}} will include the content of the "body" template at this location in the final HTML. The data for the "body" template will be whatever data is currently being rendered.
+    -->
+<!--
+The {{template "base" .}} directive is used to include the content of the "base" template at the location where the directive is placed. In this file, it appears at the very beginning, which means the "base" template content will be included first when this template is rendered.
+
+The "base" template likely defines the overall structure of the HTML page, such as the doctype, html, head, and body tags, as well as any common elements like a header or footer. It probably also includes placeholders for the "title" and "body" templates, using {{template "title" .}} and {{template "body" .}} directives.
+
+Then, this file defines the "title" and "body" templates that will replace those placeholders in the "base" template. The "title" template is just a string that includes the ID of the snippet, and the "body" template is a block of HTML that displays the snippet's details.
+
+So, while it might not look like the "base" template is being used in the "body" template, it actually is. The "body" template is defining the content that will be inserted into the "base" template at the location of the {{template "body" .}} directive.
+-->

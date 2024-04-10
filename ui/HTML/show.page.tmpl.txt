@@ -1,0 +1,8 @@
+<!--
+This line is using the template action to include another template called "base" and passing the current data context (.) to it. The . represents the current data being passed to the template. Additionally, it defines a new template called "title" which will be used later.
+-->
+<!--
+  This block of code defines a template called "body". Inside the template, there is an HTML structure for displaying a snippet. It includes the snippet's title, ID, content, creation date, and expiration date. The values for these properties are accessed using the dot notation (.) and the Snippet struct. For example, {{.Snippet.Title}} retrieves the title of the snippet.
+  
+  The pre and code tags are used to display the snippet's content in a preformatted block, preserving any whitespace or formatting. The time tag is used to display the creation and expiration dates in a semantic way.
+-->
