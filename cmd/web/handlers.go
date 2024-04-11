@@ -21,8 +21,8 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 		 	template set. If there's an error, we log the detailed error message and
 		 	the http.Error() function to send a generic 500 Internal Server Error
 		 	response to the user.
-		 	Initialize a slice containing the paths to the two files. Note that the
-		 	home.page.tmpl file must be the *first* file in the slice.
+		 	Initialize a slice containing the paths to the two files. Note that the home.page.tmpl
+			file must be the *first* file in the slice.
 
 		 	s, err := app.snippets.Latest()
 		 	if err != nil {
@@ -44,6 +44,11 @@ func (app *application) Home(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
+
+	// using the render function to render the template
+	app.Render(w, r, "home.page.tmpl", &templateData{
+		Snippets: s,
+	})
 
 	data := &templateData{Snippets: s}
 

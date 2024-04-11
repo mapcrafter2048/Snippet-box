@@ -1,10 +1,57 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"runtime/debug"
+	"time"
 )
+
+/*
+Create an addDefault helper. This takes a pointer to template data struct, adds the current year to the currentYear field and then returns the pointer. Again we are not using the *http.Request parameter in this helper, but we'll need it later in the book when we add more dynamic data to the templates.
+*/
+
+func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {
+	if td == nil {
+		td = &templateData{}
+	}
+
+	td.CurrentYear = time.Now().Year()
+
+	return td
+}
+
+/*
+	The Render function is a wrapper around the template.ExecuteTemplate() method that we talked about earlier. This means that we can call it directly in our handlers to render a template with the data from a templateData struct. The first parameter is the http.ResponseWriter where we can write the output. The second parameter is the name of the template file to render. The third parameter is a pointer to a templateData struct containing the dynamic data that we want to pass to the template. If the template doesn't exist in the cache, we call the serverError helper method to send a 500 Internal Server Error response to the user. If there's an error when rendering the template, we call the serverError helper again to send a 500 response.
+*/
+
+func (app *application) Render(w http.ResponseWriter, r *http.Request, name string, td *templateData) {
+
+	/*
+		Retieve the appropriate template set from the cache based on the page number
+		like (home.page.tmpl). if no entry exists in the cache with the provided name,
+		call the serveError helper method that we made earilier
+	*/
+
+	ts, ok := app.templateCache[name]
+	if !ok {
+		app.serverError(w, fmt.Errorf("the template %s does not exist", name))
+		return
+	}
+
+	// Initialize a new buffer
+	buf := new(bytes.Buffer)
+
+	// Execute the template set, passing in any dynamic data
+	err := ts.Execute(w, td)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	buf.WriteTo(w)
+}
 
 /*
 	serveError is a helper that writes an error message and stack trace to the errorLog
